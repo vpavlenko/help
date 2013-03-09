@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+    <div class="row">
+      <div class="large-12 columns">
+        <h1 class="docs header"><a href="{% server_root %}{{ course.urlname }}/">{{ course.name }}</a></h1>
+        <hr>
+      </div>
+    </div>
+
+<div class="row">
+<div class="large-9 push-3 columns">
+{% block content %}
+
+Контент
+{% endblock %}
+</div>
+
+{% block menu %}
+<div class="large-3 pull-9 columns">
+	<div class="docs section-container accordion" data-section data-options="deep_linking: false">
+	{% for menu_section in course.sections %}
+  <section class="section active">
+    <p class="title"><a class="nopadding" href="{{ menu_section.filename }}">{{ menu_section.name }}</a></p>
+    <div class="content">
+      <ul class="side-nav">
+      	{% for subsection in menu_section.subsections %}
+        <!-- <li class="active"><a href="type.html">Type</a></li> -->
+        <li><a class="" href="{{ menu_section.filename }}#{{ forloop.counter }}">{{ subsection }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+  {% endfor %}
+{% endblock %}
+</div>
+
+{% endblock %}
