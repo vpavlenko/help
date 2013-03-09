@@ -1,19 +1,45 @@
 <html>
 	<head>
-		<meta charset="utf-8">
-		<title>Help: {% block title %}главная страница{% endblock %}</title>
-		<link rel="stylesheet" href="libraries/css/foundation.css">
-		<link rel="stylesheet" href="libraries/css/normalize.css">
-		<script language="javascript" type="text/javascript" src="libraries/js/foundation.min.js">
-		</script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Help: {% block title %}главная страница{% endblock %}</title>
+    <link rel="stylesheet" href="{% server_root %}libraries/css/foundation.css">
+    <link rel="stylesheet" href="{% server_root %}libraries/css/normalize.css">
+    <script language="javascript" type="text/javascript" src="{% server_root %}libraries/js/foundation.min.js">
+    </script>
+
+    <link rel="stylesheet" href="{% server_root %}libraries/css/github.css">
+    <script src="{% server_root %}libraries/js/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <style type="text/css">
+    pre {
+      line-height: 1.25;
+      font-size: x-small;
+      font-weight: lighter;
+    }
+    </style>
 	</head>
 
 	<body>
-	<div class="row">
-		<div class="large-12 columns">
-			<h2>Help: введение в технологии программирования</h2>
-			<hr />
-		</div>
-	</div>
+
+
+    <nav class="top-bar">
+      <section class="top-bar-section">
+        <!-- Right Nav Section -->
+        <ul class="left">
+        {% for course in courses %}
+        	<li><a href="{% server_root %}{{ course.urlname }}/">{{ course.name }}</a></li>
+        	{% if not forloop.last %}
+          	<li class="divider"></li>
+          	{% endif %}
+        {% endfor %}
+        </ul>
+      </section>
+    </nav>
+
+	{% block body %}
+	{% endblock %}
+
 	</body>
 </html>

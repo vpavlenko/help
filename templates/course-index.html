@@ -1,1 +1,7 @@
-{% extends "base.html" %}
+{% extends "course-base.html" %}
+
+{% block title %}{{ course.name }}{% endblock %}
+
+{% block content %}
+{{ course.index_content|safe }}
+{% endblock %}

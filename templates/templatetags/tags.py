@@ -54,3 +54,20 @@ class ServerRootNode(template.Node):
 @register.tag('server_root')
 def tag_func(parser, token):
     return ServerRootNode()   
+
+
+class ProgramCodeNode(template.Node):
+    def __init__(self, nodelist, language):
+        self.nodelist = nodelist
+        self.language = language[1:-1]
+
+    def render(self, context):
+        return '''<pre><code class="{0}">'''.format(self.language) + self.nodelist.render(context).lstrip() + '''</code></pre>'''
+
+
+@register.tag('program')
+def tag_func(parser, token):
+    language = token.split_contents()[1]
+    nodelist = parser.parse(('endprogram',))
+    parser.delete_first_token()
+    return ProgramCodeNode(nodelist, language)   

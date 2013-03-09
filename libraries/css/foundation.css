@@ -1028,10 +1028,10 @@ small {
   font-size: 60%;
   line-height: inherit; }
 
-code {
+/*code {
   font-family: Consolas, "Liberation Mono", Courier, monospace;
   font-weight: bold;
-  color: #7f0a0c; }
+  color: #7f0a0c; }*/
 
 /* Lists */
 ul,

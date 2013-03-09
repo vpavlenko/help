@@ -1,1 +1,19 @@
 {% extends "base.html" %}
+
+{% block body %}
+	<div class="row">
+		<div class="large-12 columns">
+			<h2>Help: введение в технологии программирования</h2>
+			<hr />
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="large-12 columns">		
+	{% for course in courses %}
+		<h4><a href="{{ course.urlname }}/">{{ course.name }}</a></h4>
+		<br>
+	{% endfor %}
+		</div>
+	</div>
+{% endblock %}
