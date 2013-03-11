@@ -48,10 +48,10 @@
 
 <u>Способ 2</u>: импорт конкретных функции из модуля.
 {% program "python" %}
->>> 
->>> math.floor(5.2)
+>>> from math import floor, ceil
+>>> floor(5.2)
 5
->>> math.ceil(5.8)
+>>> ceil(5.8)
 6
 {% endprogram %}
 {% endsubsection %}
