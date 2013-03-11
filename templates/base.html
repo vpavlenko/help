@@ -4,9 +4,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Help: {% block title %}главная страница{% endblock %}</title>
     <link rel="stylesheet" href="{% server_root %}libraries/css/foundation.css">
+    <link rel="stylesheet" href="{% server_root %}libraries/css/docs.css">
     <link rel="stylesheet" href="{% server_root %}libraries/css/normalize.css">
-    <script language="javascript" type="text/javascript" src="{% server_root %}libraries/js/foundation.min.js">
-    </script>
+    <script language="javascript" type="text/javascript" src="{% server_root %}libraries/js/vendor/custom.modernizr.js"></script>
 
     <link rel="stylesheet" href="{% server_root %}libraries/css/github.css">
     <script src="{% server_root %}libraries/js/highlight.min.js"></script>
@@ -14,10 +14,32 @@
 
     <style type="text/css">
     pre {
-      line-height: 1.25;
+      line-height: 1.4;
       font-size: x-small;
       font-weight: lighter;
     }
+
+    .side-subnav {
+  display: block;
+  margin: 0;
+  padding: 0 0 0.3em 0;
+  list-style-type: none;
+  list-style-position: inside; }
+  .side-subnav li {
+    margin: 0 0 0 1em;
+    font-size: 0.875em; }
+    .side-subnav li a {
+      display: block;
+      color: #2ba6cb; }
+    .side-subnav li.active a {
+      color: #4d4d4d;
+      font-weight: bold; }
+    .side-subnav li.divider {
+      border-top: 1px solid;
+      height: 0;
+      padding: 0;
+      list-style: none;
+      border-top-color: #e6e6e6; }
     </style>
 	</head>
 
@@ -26,7 +48,12 @@
 
     <nav class="top-bar">
       <section class="top-bar-section">
-        <!-- Right Nav Section -->
+      <ul class="title-area">
+        <li class="name">
+          <h1><a href="{% server_root %}">Help</a></h1>
+        </li>
+      </ul>
+      
         <ul class="left">
         {% for course in courses %}
         	<li><a href="{% server_root %}{{ course.urlname }}/">{{ course.name }}</a></li>
@@ -40,6 +67,31 @@
 
 	{% block body %}
 	{% endblock %}
+
+    <footer id="copyright">
+      <div class="row full-width">
+        <div class="large-4 columns">
+          <p>Контент: Виталий Павленко, 2013 г.</p>
+        </div>
+        <div class="large-8 columns">
+          <ul class="inline-list right">
+            <li><a href="https://github.com/vpavlenko/help">Репозиторий на github</a></li>
+            <li><a href="https://vk.com/vitalypavlenko">Профиль автора на vk.com</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+<!-- Check for Zepto support, load jQuery if necessary -->
+<script>
+  document.write('<script src={% server_root %}libraries/js/vendor/'
+    + ('__proto__' in {} ? 'zepto' : 'jquery')
+    + '.js><\/script>');
+</script>
+<script src="{% server_root %}libraries/js/foundation.min.js"></script>
+<script>
+  $(document).foundation();
+</script>
 
 	</body>
 </html>

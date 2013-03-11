@@ -3,5 +3,7 @@
 {% block title %}{{ course.name }}{% endblock %}
 
 {% block content %}
-{{ course.index_content|safe }}
+{% for section in course.sections %}
+<h3><a href="{% server_root %}/{{ course.urlname }}/{{ section.filename }}">{{ section.name}}</a></h3>
+{% endfor %}
 {% endblock %}

@@ -31,8 +31,17 @@ class SubsectionNode(template.Node):
         self.subsection_name = subsection_name[1:-1]
 
     def render(self, context):
-        inner = '\n\n'.join(['<p>{0}</p>'.format(par) for par in re.split('\n\n+', self.nodelist.render(context))])
-        return '''<h3>{0}</h3>'''.format(self.subsection_name) + inner
+        counter = context.get('subsection_counter', 0)
+        counter += 1
+        context['subsection_counter'] = counter
+        BACKSLASHMAGIC = 'BACKSLASHMAGIC'
+        # TODO: count number of backslashes
+        mangle_code_sections = lambda x: (re.sub(r'\n\n+', BACKSLASHMAGIC, x.group(0)))
+        unmangle_code_sections = lambda x: (re.sub(BACKSLASHMAGIC, r'\n\n', x))
+        inner_raw = re.sub(r'\<code.+?</code>', mangle_code_sections, 
+                           self.nodelist.render(context), flags=re.DOTALL)
+        inner = unmangle_code_sections('\n\n'.join(['<p>{0}</p>'.format(par) for par in re.split('\n\n+', inner_raw)]))
+        return ('<hr>' if counter > 1 else '') + '''<a name="{0}"><h3>{1}</h3></a>'''.format(counter, self.subsection_name) + inner
 
 
 @register.tag('subsection')
@@ -48,7 +57,8 @@ class ServerRootNode(template.Node):
         pass
 
     def render(self, context):
-        return '/html/out/'
+        # TODO: make this as a script argument
+        return '/help/'
 
 
 @register.tag('server_root')

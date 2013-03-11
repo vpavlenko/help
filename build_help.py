@@ -48,12 +48,10 @@ Possible layout in INPUT_DIR:
 INPUT_DIR
 |--01_python
 |  |--help_config.py
-|  |--index_content.html
 |  |--01_intro.txt
 |  |--02_datatypes.py  (file extension doesn't matter)
 |--02_html
    |--help_config.py
-   |--index_content.html   
    |--01_intro.html
    |--02_tables.html'''.format(sys.argv[0]))
 
@@ -85,7 +83,6 @@ class Course:
 		self.src_path = os.path.join(input_dir, course_dir)
 		config = eval(open(os.path.join(self.src_path, 'help_config.py')).read())
 		self.name = config.get('name', '')
-		self.index_content = config.get('index_content', '')
 
 		self.sections = []
 		self.files = []
@@ -108,7 +105,10 @@ class Course:
 			output_file.write(index_template.render(index_context))
 
 		for file in self.files:
-			shutil.copytree(file, os.path.join(output_dir, self.urlname, os.path.split(file)[1]))
+			try:
+				shutil.copytree(file, os.path.join(output_dir, self.urlname, os.path.split(file)[1]))
+			except NotADirectoryError:
+				shutil.copy2(file, os.path.join(output_dir, self.urlname, os.path.split(file)[1]))
 
 		for section in self.sections:
 			print('  Render section "{0}"'.format(section.name))
