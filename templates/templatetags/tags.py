@@ -1,11 +1,19 @@
 # -*- coding: utf-8 -*-
 
 import re
+import pickle
+import os
+
+
+SCRIPT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
 
 from django import template
 
 register = template.Library()
+
+
+settings = None  # will be loaded once in ServerRootNode.render()
 
 
 class SectionNode(template.Node):
@@ -57,8 +65,14 @@ class ServerRootNode(template.Node):
         pass
 
     def render(self, context):
-        # TODO: make this as a script argument
-        return '/help/'
+        global settings
+
+        if not settings:
+            with open(os.path.join(SCRIPT_ROOT, 'tags_settings.pickle'), 'rb') as f:
+                settings = pickle.load(f)
+            if not settings['server_root'].endswith('/'):
+                settings['server_root'] += '/'
+        return settings['server_root']
 
 
 @register.tag('server_root')

@@ -5,12 +5,10 @@ import os
 import shutil
 import collections
 import re
+import pickle
+
 
 SCRIPT_ROOT = os.path.abspath(os.path.dirname(__file__))
-
-
-# shutil.rmtree(os.path.join(SCRIPT_ROOT, '__pycache__'), ignore_errors=True)
-# shutil.rmtree(os.path.join(SCRIPT_ROOT, 'templates/templatetags/__pycache__'), ignore_errors=True)
 
 
 with open('settings.py', 'w') as output_file:
@@ -40,7 +38,7 @@ add_to_builtins('templates.templatetags.tags')
 
 def print_usage():
 	print('''Usage:
-{0} INPUT_DIR OUTPUT_DIR
+{0} INPUT_DIR OUTPUT_DIR SERVER_ROOT
 
 Script directory should contain the folder 'libraries/'.
 
@@ -127,11 +125,15 @@ def render_index(index_content, courses, output_dir):
 
 
 def main():
-	if len(sys.argv) != 3:
+	if len(sys.argv) != 4:
 		print_usage()
 		sys.exit(1)
 	else:
-		input_dir, output_dir = sys.argv[1:]
+		input_dir, output_dir, server_root = sys.argv[1:]
+
+		with open(os.path.join(SCRIPT_ROOT, 'templates/templatetags/tags_settings.pickle'), 'wb') as f:
+			pickle.dump({'server_root': server_root}, f)
+
 		libraries_dir = os.path.join(SCRIPT_ROOT, 'libraries')
 
 		print('Remove "{0}"'.format(output_dir))
