@@ -3,6 +3,7 @@
 import re
 import pickle
 import os
+import html
 
 
 SCRIPT_ROOT = os.path.abspath(os.path.dirname(__file__))
@@ -81,17 +82,42 @@ def tag_func(parser, token):
 
 
 class ProgramCodeNode(template.Node):
-    def __init__(self, nodelist, language):
-        self.nodelist = nodelist
+    def __init__(self, program_text, language, filename):
+        self.program_text = program_text
         self.language = language[1:-1]
+        self.filename = filename[1:-1] if filename else ''
 
     def render(self, context):
-        return '''<pre><code class="{0}">'''.format(self.language) + self.nodelist.render(context).lstrip() + '''</code></pre>'''
+        return (('<div class="filename">{0}</div>'.format(self.filename) if self.filename else '') + 
+                '''<div><pre><code class="{0}">'''.format(self.language) + 
+                self.program_text + 
+                '''</code></pre></div>''')
 
 
 @register.tag('program')
 def tag_func(parser, token):
-    language = token.split_contents()[1]
-    nodelist = parser.parse(('endprogram',))
-    parser.delete_first_token()
-    return ProgramCodeNode(nodelist, language)   
+    language, *params = token.split_contents()[1:]
+    filename = None
+    if params:
+        if len(params) > 1:
+            raise ValueError('''Error in some file at line {lineno}:
+Too many parameters to "program" tag: need LANGUAGE [PROGRAM], got "{0}"'''.format(
+                str(params), lineno=token.lineno))
+        else:
+            filename = params[0]
+
+    text = []
+    while True:
+        token = parser.tokens.pop(0)
+        if token.contents == 'endprogram':
+            break
+        if token.token_type == template.TOKEN_VAR:
+            text.append('{{ ')
+        elif token.token_type == template.TOKEN_BLOCK:
+            text.append('{% ')
+        text.append(token.contents)
+        if token.token_type == template.TOKEN_VAR:
+            text.append(' }}')
+        elif token.token_type == template.TOKEN_BLOCK:
+            text.append(' %}')
+    return ProgramCodeNode(html.escape(''.join(text).strip()), language, filename)

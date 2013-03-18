@@ -33,3 +33,8 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+# Custom
+/settings.py
+/templates/templatetags/tags_settings.pickle
+/out/
