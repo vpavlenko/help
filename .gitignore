@@ -38,3 +38,5 @@ nosetests.xml
 /settings.py
 /templates/templatetags/tags_settings.pickle
 /out/
+*.sh
+!/in/01_python/third_lecture/*

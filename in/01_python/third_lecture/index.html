@@ -74,7 +74,7 @@
 					</section>
 
 					<section>
-						<h3>Latex не собирает &lt;левый&raquo; файл</h3>
+						<h3>Latex не собирает &laquo;левый&raquo; файл</h3>
 
 						<p>
 							Исходный текст файла <code>bad_file.tex</code>:
@@ -587,12 +587,14 @@ print(all(any(column) for column in zip(*rows)))</code></pre>
 ['а', 'б', 'в', 'г', 'д', 'е', 'ж', 'з', 'и', 'й']
 >>> ''.join(str_seq('а', 'й'))
 'абвгдежзий'</code></pre>
-                        <p>Проблема: под результат создаётся промежуточный список, хотя новые буквы последовательности можно вычислять &laquo;лениво&raquo;.
+                        <p>Проблема: под результат создаётся промежуточный список, хотя новые буквы последовательности можно вычислять &laquo;лениво&raquo;.</p>
 					</section>
 				
 					<section>
-						<h3>генераторы вместо list comprehension</h3>
+						<h3>однострочные генераторы вместо list comprehension</h3>
 					
+                        <p>Конструкция <code>(выражение for переменная in последовательность if условие)</code> создает генератор.</p>
+
                         <code class="python"><pre>def str_seq(start, end):
 ...     return (chr(i) for i in range(ord(start), ord(end) + 1))
 ... 
@@ -600,6 +602,14 @@ print(all(any(column) for column in zip(*rows)))</code></pre>
 &lt;generator object &lt;genexpr&gt; at 0x7f5b7c034be0&gt;
 >>> ''.join(str_seq('а', 'й'))
 'абвгдежзий'</code></pre>
+
+                        <p>При передаче генератора в функцию внешние круглые скобки можно опускать.</p>
+                        
+					</section>
+
+                    <section>
+                        <h3>yield-генераторы</h3>
+                    
                         <p>Синтаксис для более сложных генераторов: yield вместо return.</p>
 
                                 <code class="python"><pre>def str_seq(start, end):
@@ -608,7 +618,10 @@ print(all(any(column) for column in zip(*rows)))</code></pre>
         yield chr(i)
         i += 1</code></pre>
                         <p><code>yield</code> возвращает новое значение и приостанавливает работу генератора.
-					</section>
+                            Когда будет запрошено следующее значение генератора, работа продолжится со следующего за <code>yield</code> оператора.
+                        </p>
+                    </section>
+
 
 					<section>
 						<h3>что возвращают range, map, filter, zip?</h3>
@@ -621,7 +634,11 @@ range(0, 5)
 >>> map(operator.methodcaller('lower'), 'AbCDeF')
 &lt;map object at 0x7f0eafb4d850></code></pre>
 
-                        <p>Плюс такого подхода: расходуется меньше дополнительной памяти.</p>
+                        <p>Плюсы:
+                        <ul>
+                        <li>расходуется меньше дополнительной памяти
+                        <li><code>map</code>, <code>filter</code> и <code>zip</code> сразу умеют работать с бесконечными последовательностями
+                        </ul></p>
 					</section>
 
                     <section>
@@ -637,11 +654,13 @@ range(0, 5)
 1 Vasya
 2 Petya
 3 Kolya</code></pre>
+
+                        <p><code>zip</code> останавливается при достижении конца самой короткой последовательности. Противоположное поведение реализовано в <code>itertools.zip_longest</code></p>
                     </section>
 
                     <section>
                         <h3>enumerate</h3>
-                        <p><code>enumerate</code> &mdash; сокращение для предыдущей конструкции
+                        <p><code>enumerate</code> &mdash; сокращение для предыдущей конструкции.
                         </p>
 
                         <code><pre>>>> names = ['Vasya', 'Petya', 'Kolya']
@@ -656,9 +675,6 @@ range(0, 5)
                     <section>
                         <h3>itertools.cycle</h3>
                         <p><code>itertools.cycle</code> &mdash; бесконечный циклический обход последовательности
-                        </p>
-
-                        <p><code>zip</code> останавливается на самой короткой последовательности
                         </p>
 
                         <p>На &laquo;первый-второй&raquo; рассчитайся!
@@ -676,7 +692,7 @@ range(0, 5)
                     </section>  
 
                     <section>
-                        <h3>islice: первые несколько элементов</h3>
+                        <h3>itertools.islice: первые несколько элементов бесконечной последовательности</h3>
 
 
                         <code><pre>>>> def fib():
@@ -695,7 +711,7 @@ range(0, 5)
 
 					<section>
 						<h3>map, filter и zip можно применять к бесконечным последовательностям</h3>
-						<p>Это имеет свои последствия. Например, обычные списки или <code>range</code>-объекты могут возвращать несколько независимых итераторов по своему содержимому.
+						<p>Это имеет свои последствия. Например, обычные списки или <code>range</code>-объекты могут возвращать несколько независимых итераторов по своему содержимому, а <code>map</code> не может.
 						</p>
 
 
